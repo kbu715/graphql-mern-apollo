@@ -1,15 +1,38 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+import { useQuery, gql } from "@apollo/client";
+// import gql from "graphql-tag";
 import { Grid } from "semantic-ui-react";
-import PostCard from '../components/PostCard';
+import PostCard from "../components/PostCard";
+
+const FETCH_POSTS_QUERY = gql`
+  query {
+    getPosts {
+      id
+      body
+      createdAt
+      username
+      likeCount
+      likes {
+        username
+      }
+      commentCount
+      comments {
+        id
+        username
+        createdAt
+        body
+      }
+    }
+  }
+`;
+
 const Home = () => {
-    const {
-        loading,
-        data: { getPosts: posts }
-      } = useQuery(FETCH_POSTS_QUERY);
-  if (posts) {
-    console.log(posts);
+  const {
+    loading,
+    data,
+  } = useQuery(FETCH_POSTS_QUERY);
+  if (data) {
+    console.log(data);
   }
   return (
     <Grid columns={3}>
@@ -18,39 +41,17 @@ const Home = () => {
       </Grid.Row>
       <Grid.Row>
         {loading ? (
-            <h1>Loading posts..</h1>
+          <h1>Loading posts..</h1>
         ) : (
-            posts && posts.map(post => (
-                <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                    <PostCard post={post} />
-                </Grid.Column>
-            ))
+          data?.getPosts?.map((post) => (
+            <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
+              <PostCard post={post} />
+            </Grid.Column>
+          ))
         )}
       </Grid.Row>
     </Grid>
   );
 };
-
-const FETCH_POSTS_QUERY = gql`
-  {
-    getPosts {
-      id
-      body
-      createdAt
-      username
-      likes {
-        username
-      }
-      likeCount
-      comments {
-        id
-        username
-        createdAt
-        body
-      }
-      commentCount
-    }
-  }
-`;
 
 export default Home;
