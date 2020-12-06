@@ -2,39 +2,34 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { Button, Form } from "semantic-ui-react";
+import { useForm } from '../util/hooks';
 
 const Register = (props) => {
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+
+  const { onChange, onSubmit, values } = useForm(registerUser, {
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
-  });
+  })
 
-  const onChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
-  };
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, { //addUser는 이름을 맘대로 바꿀수있다.
     update(_, result) {
-      console.log(result);
       props.history.push('/');
     },
     onError(err) {
-      console.log(err.graphQLErrors[0].extensions.exception.errors);
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
     variables: values,
   });
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+
+
+  function registerUser(){ //호이스팅
     addUser();
-  };
+  }
 
   return (
     <div className="form-container">
