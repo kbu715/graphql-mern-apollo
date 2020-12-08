@@ -6,29 +6,32 @@ import { Button, Confirm, Icon } from 'semantic-ui-react';
 import { FETCH_POSTS_QUERY } from '../util/graphql';
 import MyPopup from '../util/MyPopup';
 
-function DeleteButton({ postId, callback }) {
+function DeleteButton({ postId, callback, commentId }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const mutation = DELETE_POST_MUTATION;
+  const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
 
   const [deletePostOrMutation] = useMutation(mutation, {
     update(proxy) {
       setConfirmOpen(false);
-      const data = proxy.readQuery({
-        query: FETCH_POSTS_QUERY,
-      });
-      proxy.writeQuery({
-        query: FETCH_POSTS_QUERY,
-        data: {
-          getPosts: data.getPosts.filter((p) => p.id !== postId),
-        },
-      });
+
+      if (!commentId) {
+        const data = proxy.readQuery({
+          query: FETCH_POSTS_QUERY,
+        });
+        proxy.writeQuery({
+          query: FETCH_POSTS_QUERY,
+          data: {
+            getPosts: data.getPosts.filter((p) => p.id !== postId),
+          },
+        });
+      }
 
       if (callback) callback();
     },
     variables: {
       postId,
-      //   commentId,
+      commentId,
     },
   });
   return (
