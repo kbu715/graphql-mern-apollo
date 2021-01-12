@@ -46,7 +46,7 @@ const Home = () => {
       <Grid.Row>
         {user && (
           <Grid.Column>
-            <PostForm />
+            <PostForm seePost={seePost} />
           </Grid.Column>
         )}
         {loading ? (
@@ -55,7 +55,7 @@ const Home = () => {
           <Transition.Group>
             {posts.map((post) => (
               <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                <PostCard post={post} />
+                <PostCard post={post} seePost={seePost} />
               </Grid.Column>
             ))}
           </Transition.Group>

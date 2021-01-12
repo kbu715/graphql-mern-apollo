@@ -25,3 +25,11 @@ Implement a GraphQL server that uses Node and Express to communicate to a MongoD
 ## Apollo hooks
 
 - refetch : A function that allows you to refetch the query and optionally pass in new variables
+
+- refetchQueries
+- awaitRefetchQueries
+- ignoreResults
+
+## ref
+
+- [https://www.apollographql.com/blog/when-to-use-refetch-queries-in-apollo-client/](https://www.apollographql.com/blog/when-to-use-refetch-queries-in-apollo-client/)

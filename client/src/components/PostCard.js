@@ -9,6 +9,7 @@ import MyPopup from '../util/MyPopup';
 
 const PostCard = ({
   post: { body, id, username, createdAt, likeCount, commentCount, likes },
+  seePost,
 }) => {
   const { user } = useContext(AuthContext);
 
@@ -36,7 +37,9 @@ const PostCard = ({
             </Label>
           </Button>
         </MyPopup>
-        {user && user.username === username && <DeleteButton postId={id} />}
+        {user && user.username === username && (
+          <DeleteButton postId={id} seePost={seePost} />
+        )}
       </Card.Content>
     </Card>
   );

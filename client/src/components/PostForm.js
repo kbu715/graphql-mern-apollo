@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { useForm } from '../util/hooks';
 import { FETCH_POSTS_QUERY } from '../util/graphql';
 
-function PostForm() {
+function PostForm({ seePost }) {
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     body: '',
   });
@@ -26,6 +26,7 @@ function PostForm() {
         },
       });
       values.body = '';
+      seePost(); // reload
     },
     onError(error) {
       console.log('error', error);
